@@ -74,6 +74,7 @@ def discretize_column(data_frame, column_name, num):
 
 
 def dummy_skills(group, num):
+    #print(group)
     skills = get_popular_skills(group, num).split(';')
     skills.append("Другие навыки")
     for skill in skills:
@@ -89,6 +90,7 @@ def dummy_skills(group, num):
 
 
 def get_popular_skills(data_frame, num):
+   #print(data_frame)
     skills = get_unique_skills(data_frame["key_skills"])
     return ';'.join((sorted(skills, key=skills.get, reverse=True))[0:min(len(skills), num)])
 
@@ -100,3 +102,12 @@ def get_unique_skills(all_skills):
             for skill in skills.split(';'):
                 skills_dict[skill] = skills_dict.get(skill, 0) + 1
     return skills_dict
+
+
+def update_groups(data_frame, all_groups):
+    for group in all_groups:
+        new_gr = pd.DataFrame()
+        for value in group["values"].itertuples():
+            new_gr = new_gr.append(data_frame[data_frame["id"] == value.id])
+        group["values"] = new_gr
+    return all_groups
