@@ -1,0 +1,14 @@
+
+my.normalize_column(df, "days")
+my.discretize_column(df, "min_salary", 10)
+my.discretize_column(df, "max_salary", 10)
+df = df.drop('max_experience', 1)
+df = pd.get_dummies(data=df, columns=['city', 'min_experience', 'schedule', 'employment'])
+pd.DataFrame(df.to_csv("V.csv", sep=';', encoding='UTF-8-sig'))
+for vacancy in df.itertuples():
+    for group in groups:
+        if my.AddToGroup(group, vacancy) == 1:
+            break
+for group in groups:
+    my.dummy_skills(group["values"], 10)
+    pd.DataFrame(group["values"]).to_csv("11/" + group["name"] + ".csv", sep=';', encoding='UTF-8-sig')
