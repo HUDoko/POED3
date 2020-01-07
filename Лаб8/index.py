@@ -1,6 +1,7 @@
 import AllMethods as my
 import clustering as klys
 from sklearn.cluster import KMeans
+from sklearn.cluster import MeanShift
 from sklearn.metrics import pairwise_distances_argmin_min
 
 
@@ -23,7 +24,8 @@ cities_columns = klys.get_cities_columns(df)
 experiences_columns = klys.get_experiences_columns(df)
 employments_columns = klys.get_employments_columns(df)
 schedules_columns = klys.get_schedules_columns(df)
-n = 3
+n = 10
+
 kmeans_clusters = []
 kmeans = KMeans(n_clusters=n, random_state=0).fit_predict(df)
 closest, _ = pairwise_distances_argmin_min(KMeans(n_clusters=n, random_state=0).fit(df).cluster_centers_, df)
@@ -31,4 +33,21 @@ for i in range(0, n):
     kmeans_clusters.append(klys.Cluster(i, df.iloc[closest[i]], names.iloc[closest[i]]))
 for i in range(0, len(kmeans)):
     kmeans_clusters[kmeans[i]].add(df.iloc[i], skills_columns, cities_columns, experiences_columns, employments_columns, schedules_columns)
-print(kmeans_clusters[0])
+f = open('k-means.txt','w')
+for i in range(0, len(kmeans_clusters)):
+    f.write(kmeans_clusters[i] + '\n')
+f.close()
+
+meanshift_clusters = []
+meanshift = MeanShift().fit_predict(df)
+closest, _ = pairwise_distances_argmin_min(MeanShift().fit(df).cluster_centers_, df)
+for i in range(0, len(closest)):
+    meanshift_clusters.append(klys.Cluster(i, df.iloc[closest[i]], names.iloc[closest[i]]))
+for i in range(0, len(meanshift)):
+    meanshift_clusters[meanshift[i]].add(df.iloc[i], skills_columns, cities_columns, experiences_columns, employments_columns, schedules_columns)
+f = open('mean.txt', 'w')
+for i in range(0, len(meanshift_clusters)):
+    f.write(meanshift_clusters[i] + '\n')
+f.close()
+
+
