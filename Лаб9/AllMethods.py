@@ -162,8 +162,12 @@ def FindTheBestClassifier(train, target, test_size):
 
 def predict(new_df, train_l, target_l, train_t, target_t):
     model_rfc = RandomForestClassifier(n_estimators=100)
-    #model_rfc = KNeighborsClassifier(n_neighbors=100)
     model_rfc = model_rfc.fit(train_l, target_l)
-    print(model_rfc.score(train_l, target_l))
-    print(model_rfc.score(train_t, target_t))
+    res1= model_rfc.score(train_l, target_l)
+    res2 = model_rfc.score(train_t, target_t)
+    print(res1)
+    print(res2)
+    file = open('res.txt','a')
+    file.write("Обучающая : " + str(res1) + " Тестовая : " + str(res2) )
+    file.close()
     return model_rfc.predict(new_df)
